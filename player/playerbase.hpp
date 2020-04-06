@@ -108,6 +108,8 @@ class PlayerBase
 public:
 	PlayerBase();
 	virtual ~PlayerBase();
+	PlayerBase(const PlayerBase&) = delete;
+	PlayerBase& operator =(const PlayerBase&) = delete;
 	
 	virtual UINT32 GetPlayerType(void) const;
 	virtual const char* GetPlayerName(void) const;
