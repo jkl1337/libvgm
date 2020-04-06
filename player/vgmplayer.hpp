@@ -172,6 +172,8 @@ public:
 	UINT8 Seek(UINT8 unit, UINT32 pos);
 	UINT32 Render(UINT32 smplCnt, WAVE_32BS* data);
 	
+	CHIP_DEVICE* GetDevicePtr(UINT8 chipType, UINT8 chipID);
+
 protected:
 	UINT8 ParseHeader(void);
 	void ParseXHdr_Data32(UINT32 fileOfs, std::vector<XHDR_DATA32>& xData);
@@ -195,7 +197,6 @@ protected:
 	
 	static void DeviceLinkCallback(void* userParam, VGM_BASEDEV* cDev, DEVLINK_INFO* dLink);
 	void LoadOPL4ROM(CHIP_DEVICE* chipDev);
-	CHIP_DEVICE* GetDevicePtr(UINT8 chipType, UINT8 chipID);
 	
 	UINT8 SeekToTick(UINT32 tick);
 	UINT8 SeekToFilePos(UINT32 pos);
