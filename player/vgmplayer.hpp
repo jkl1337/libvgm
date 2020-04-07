@@ -181,8 +181,8 @@ protected:
 	
 	UINT8 LoadTags(void);
 	std::string GetUTF8String(const UINT8* startPtr, const UINT8* endPtr);
-	
-	size_t DeviceID2OptionID(UINT32 id) const;
+
+	int DeviceID2OptionID(UINT32 id) const;
 	void RefreshMuting(CHIP_DEVICE& chipDev, const PLR_MUTE_OPTS& muteOpts);
 	
 	void RefreshTSRates(void);

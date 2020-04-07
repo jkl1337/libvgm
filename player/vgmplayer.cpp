@@ -560,7 +560,7 @@ UINT8 VGMPlayer::GetSongDeviceInfo(std::vector<PLR_DEV_INFO>& devInfList) const
 	}
 }
 
-size_t VGMPlayer::DeviceID2OptionID(UINT32 id) const
+int VGMPlayer::DeviceID2OptionID(UINT32 id) const
 {
 	UINT8 type;
 	UINT8 instance;
@@ -577,13 +577,13 @@ size_t VGMPlayer::DeviceID2OptionID(UINT32 id) const
 	}
 	else
 	{
-		return (size_t)-1;
+		return -1;
 	}
 	
 	if (instance < 2)
 		return _devOptMap[type][instance];
 	else
-		return (size_t)-1;
+		return -1;
 }
 
 void VGMPlayer::RefreshMuting(VGMPlayer::CHIP_DEVICE& chipDev, const PLR_MUTE_OPTS& muteOpts)
@@ -603,8 +603,8 @@ void VGMPlayer::RefreshMuting(VGMPlayer::CHIP_DEVICE& chipDev, const PLR_MUTE_OP
 
 UINT8 VGMPlayer::SetDeviceOptions(UINT32 id, const PLR_DEV_OPTS& devOpts)
 {
-	size_t optID = DeviceID2OptionID(id);
-	if (optID == (UINT32)-1)
+	int optID = DeviceID2OptionID(id);
+	if (optID == -1)
 		return 0x80;	// bad device ID
 	
 	_devOpts[optID] = devOpts;
@@ -623,8 +623,8 @@ UINT8 VGMPlayer::SetDeviceOptions(UINT32 id, const PLR_DEV_OPTS& devOpts)
 
 UINT8 VGMPlayer::GetDeviceOptions(UINT32 id, PLR_DEV_OPTS& devOpts) const
 {
-	size_t optID = DeviceID2OptionID(id);
-	if (optID == (UINT32)-1)
+	int optID = DeviceID2OptionID(id);
+	if (optID == -1)
 		return 0x80;	// bad device ID
 	
 	devOpts = _devOpts[optID];
@@ -633,8 +633,8 @@ UINT8 VGMPlayer::GetDeviceOptions(UINT32 id, PLR_DEV_OPTS& devOpts) const
 
 UINT8 VGMPlayer::SetDeviceMuting(UINT32 id, const PLR_MUTE_OPTS& muteOpts)
 {
-	size_t optID = DeviceID2OptionID(id);
-	if (optID == (UINT32)-1)
+	int optID = DeviceID2OptionID(id);
+	if (optID == -1)
 		return 0x80;	// bad device ID
 	
 	_devOpts[optID].muteOpts = muteOpts;
@@ -647,8 +647,8 @@ UINT8 VGMPlayer::SetDeviceMuting(UINT32 id, const PLR_MUTE_OPTS& muteOpts)
 
 UINT8 VGMPlayer::GetDeviceMuting(UINT32 id, PLR_MUTE_OPTS& muteOpts) const
 {
-	size_t optID = DeviceID2OptionID(id);
-	if (optID == (UINT32)-1)
+	int optID = DeviceID2OptionID(id);
+	if (optID == -1)
 		return 0x80;	// bad device ID
 	
 	muteOpts = _devOpts[optID].muteOpts;
