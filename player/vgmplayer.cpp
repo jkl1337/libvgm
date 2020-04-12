@@ -542,15 +542,16 @@ UINT8 VGMPlayer::GetSongDeviceInfo(std::vector<PLR_DEV_INFO>& devInfList) const
 			{
 				PLR_DEV_INFO devInf;
 				memset(&devInf, 0x00, sizeof(PLR_DEV_INFO));
-				
+
+				devInf.id = -1;
 				devInf.type = _DEV_LIST[vgmChip];
 				if (devInf.type == DEVID_C140 && _hdrBuffer[0x96] == 2)
 					devInf.type = DEVID_C219;
-				devInf.id = chipID;
+				devInf.instance = chipID;
+				devInf.volume = GetChipVolume(vgmChip, chipID, 0);
 				devInf.core = 0x00;
 				devInf.clock = GetChipClock(vgmChip, chipID) & ~0xC0000000;
 				devInf.cParams = 0x00;
-				devInf.volume = GetChipVolume(vgmChip, chipID, 0);
 				devInf.smplRate = 0;
 				devInfList.push_back(devInf);
 			}
