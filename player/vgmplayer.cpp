@@ -496,7 +496,9 @@ UINT8 VGMPlayer::GetSongDeviceInfo(std::vector<PLR_DEV_INFO>& devInfList) const
 			if (devInf.type == DEVID_SN76496)
 			{
 				const SN76496_CFG* snCfg = (const SN76496_CFG*)dCfg;
-				devInf.cParams = (snCfg->noiseTaps << 0) | (snCfg->shiftRegWidth << 16) | (_hdrBuffer[0x2B] << 24);
+
+				devInf.cParams = (snCfg->noiseTaps << 0) | (snCfg->shiftRegWidth << 16) | ((_hdrBuffer[0x2B] & 0x7F) << 24) |
+						 (snCfg->t6w28_tone ? (1 << 31) : 0);
 			}
 			else if (devInf.type == DEVID_AY8910)
 			{
@@ -597,7 +599,7 @@ void VGMPlayer::RefreshMuting(VGMPlayer::CHIP_DEVICE& chipDev, const PLR_MUTE_OP
 		if (devInf->dataPtr != NULL && devInf->devDef->SetMuteMask != NULL)
 			devInf->devDef->SetMuteMask(devInf->dataPtr, muteOpts.chnMute[linkCntr]);
 	}
-	
+
 	return;
 }
 
@@ -1287,8 +1289,9 @@ void VGMPlayer::InitDevices(void)
 				break;
 			case DEVID_ES5506:
 				{
-					devCfg.flags = _hdrBuffer[0xD5];	// output channels
-					
+					// output channels + ES5505/ES5506 flag
+					devCfg.flags = _hdrBuffer[0xD5] | (hdrClock & 0x80000000);
+
 					SaveDeviceConfig(sdCfg.cfgData, &devCfg, sizeof(DEV_GEN_CFG));
 					retVal = SndEmu_Start(chipType, &devCfg, devInf);
 					if (retVal)
