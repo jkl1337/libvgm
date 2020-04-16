@@ -186,7 +186,7 @@ VGMPlayer::~VGMPlayer()
 	
 	if (_cpcUTF16 != NULL)
 		CPConv_Deinit(_cpcUTF16);
-	
+
 	return;
 }
 
@@ -654,6 +654,33 @@ UINT8 VGMPlayer::GetDeviceMuting(UINT32 id, PLR_MUTE_OPTS& muteOpts) const
 		return 0x80;	// bad device ID
 	
 	muteOpts = _devOpts[optID].muteOpts;
+	return 0x00;
+}
+
+UINT8 VGMPlayer::SetDevicePanning(UINT32 id, const INT16* pan, int cnt)
+{
+	INT16 buf[14] = {};
+	int optID = DeviceID2OptionID(id);
+	if (optID == -1)
+		return 0x80;	// bad device ID
+
+	size_t devID = _optDevMap[optID];
+	if (devID < _devices.size()) {
+		UINT8 chipType = _devices[devID].vgmChipType;
+		DEV_INFO *devInf = &_devices[devID].base.defInf;
+		if (devInf->devDef->SetPanning == NULL)
+			return 0x01;
+		int sizeReq = 14;
+		if (chipType == DEVID_SN76496)
+			sizeReq = 4;
+		else if (chipType == DEVID_AY8910)
+			sizeReq = 3;
+		if (cnt < sizeReq) {
+			memcpy(buf, pan, cnt*sizeof(*pan));
+			pan = buf;
+		}
+		devInf->devDef->SetPanning(devInf->dataPtr, const_cast<INT16*>(pan));
+	}
 	return 0x00;
 }
 

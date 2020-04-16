@@ -99,6 +99,7 @@ public:
 	UINT8 GetDeviceMuting(UINT32 id, PLR_MUTE_OPTS& muteOpts) const;
 	UINT8 SetPlayerOptions(const DRO_PLAY_OPTIONS& playOpts);
 	UINT8 GetPlayerOptions(DRO_PLAY_OPTIONS& playOpts) const;
+	UINT8 SetDevicePanning(UINT32, const INT16*, int) { return 0x80; }
 	
 	//UINT32 GetSampleRate(void) const;
 	UINT8 SetSampleRate(UINT32 sampleRate);

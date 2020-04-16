@@ -62,7 +62,8 @@ public:
 	UINT8 GetDeviceOptions(UINT32 id, PLR_DEV_OPTS& devOpts) const;
 	UINT8 SetDeviceMuting(UINT32 id, const PLR_MUTE_OPTS& muteOpts);
 	UINT8 GetDeviceMuting(UINT32 id, PLR_MUTE_OPTS& muteOpts) const;
-	
+	UINT8 SetDevicePanning(UINT32, const INT16*, int) { return 0x80; }
+
 	//UINT32 GetSampleRate(void) const;
 	UINT8 SetSampleRate(UINT32 sampleRate);
 	//UINT8 SetPlaybackSpeed(double speed);
@@ -78,7 +79,7 @@ public:
 	UINT32 GetTotalTicks(void) const;	// get time for playing once in ticks
 	UINT32 GetLoopTicks(void) const;	// get time for one loop in ticks
 	//UINT32 GetTotalPlayTicks(UINT32 numLoops) const;	// get time for playing + looping (without fading)
-	
+
 	UINT8 Start(void);
 	UINT8 Stop(void);
 	UINT8 Reset(void);
