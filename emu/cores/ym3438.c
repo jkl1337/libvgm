@@ -223,7 +223,7 @@ static const Bit32u fm_algorithm[4][6][8] = {
 
 //static Bit32u chip_type = ym3438_mode_readmode;
 
-void NOPN2_DoIO(ym3438_t *chip)
+static inline void NOPN2_DoIO(ym3438_t *chip)
 {
     /* Write signal check */
     chip->write_a_en = (chip->write_a & 0x03) == 0x01;
@@ -237,7 +237,7 @@ void NOPN2_DoIO(ym3438_t *chip)
     chip->write_busy_cnt &= 0x1f;
 }
 
-void NOPN2_DoRegWrite(ym3438_t *chip)
+static inline void NOPN2_DoRegWrite(ym3438_t *chip)
 {
     Bit32u i;
     Bit32u slot = chip->cycles % 12;
@@ -456,7 +456,7 @@ void NOPN2_DoRegWrite(ym3438_t *chip)
     }
 }
 
-void NOPN2_PhaseCalcIncrement(ym3438_t *chip)
+static inline void NOPN2_PhaseCalcIncrement(ym3438_t *chip)
 {
     Bit32u chan = chip->channel;
     Bit32u slot = chip->cycles;
@@ -525,7 +525,7 @@ void NOPN2_PhaseCalcIncrement(ym3438_t *chip)
     chip->pg_inc[slot] &= 0xfffff;
 }
 
-void NOPN2_PhaseGenerate(ym3438_t *chip)
+static inline void NOPN2_PhaseGenerate(ym3438_t *chip)
 {
     Bit32u slot;
     /* Mask increment */
@@ -544,7 +544,7 @@ void NOPN2_PhaseGenerate(ym3438_t *chip)
     }
 }
 
-void NOPN2_EnvelopeSSGEG(ym3438_t *chip)
+static inline void NOPN2_EnvelopeSSGEG(ym3438_t *chip)
 {
     Bit32u slot = chip->cycles;
     Bit8u direction = 0;
@@ -591,7 +591,7 @@ void NOPN2_EnvelopeSSGEG(ym3438_t *chip)
     chip->eg_ssg_enable[slot] = (chip->ssg_eg[slot] >> 3) & 0x01;
 }
 
-void NOPN2_EnvelopeADSR(ym3438_t *chip)
+static inline void NOPN2_EnvelopeADSR(ym3438_t *chip)
 {
     Bit32u slot = (chip->cycles + 22) % 24;
 
@@ -715,7 +715,7 @@ void NOPN2_EnvelopeADSR(ym3438_t *chip)
     chip->eg_state[slot] = nextstate;
 }
 
-void NOPN2_EnvelopePrepare(ym3438_t *chip)
+static inline void NOPN2_EnvelopePrepare(ym3438_t *chip)
 {
     Bit8u rate;
     Bit8u sum;
@@ -803,7 +803,7 @@ void NOPN2_EnvelopePrepare(ym3438_t *chip)
     chip->eg_sl[0] = chip->sl[slot];
 }
 
-void NOPN2_EnvelopeGenerate(ym3438_t *chip)
+static inline void NOPN2_EnvelopeGenerate(ym3438_t *chip)
 {
     Bit32u slot = (chip->cycles + 23) % 24;
     Bit16u level;
@@ -836,7 +836,7 @@ void NOPN2_EnvelopeGenerate(ym3438_t *chip)
     chip->eg_out[slot] = level;
 }
 
-void NOPN2_UpdateLFO(ym3438_t *chip)
+static inline void NOPN2_UpdateLFO(ym3438_t *chip)
 {
     if ((chip->lfo_quotient & lfo_cycles[chip->lfo_freq]) == lfo_cycles[chip->lfo_freq])
     {
@@ -850,7 +850,7 @@ void NOPN2_UpdateLFO(ym3438_t *chip)
     chip->lfo_cnt &= chip->lfo_en;
 }
 
-void NOPN2_FMPrepare(ym3438_t *chip)
+static inline void NOPN2_FMPrepare(ym3438_t *chip)
 {
     Bit32u slot = (chip->cycles + 6) % 24;
     Bit32u channel = chip->channel;
@@ -912,7 +912,7 @@ void NOPN2_FMPrepare(ym3438_t *chip)
     }
 }
 
-void NOPN2_ChGenerate(ym3438_t *chip)
+static inline void NOPN2_ChGenerate(ym3438_t *chip)
 {
     Bit32u slot = (chip->cycles + 18) % 24;
     Bit32u channel = chip->channel;
@@ -947,7 +947,7 @@ void NOPN2_ChGenerate(ym3438_t *chip)
     chip->ch_acc[channel] = sum;
 }
 
-void NOPN2_ChOutput(ym3438_t *chip)
+static inline void NOPN2_ChOutput(ym3438_t *chip)
 {
     Bit32u cycles = chip->cycles;
     Bit32u slot = chip->cycles;
@@ -1030,7 +1030,7 @@ void NOPN2_ChOutput(ym3438_t *chip)
     }
 }
 
-void NOPN2_FMGenerate(ym3438_t *chip)
+static inline void NOPN2_FMGenerate(ym3438_t *chip)
 {
     Bit32u slot = (chip->cycles + 19) % 24;
     /* Calculate phase */
@@ -1068,7 +1068,7 @@ void NOPN2_FMGenerate(ym3438_t *chip)
     chip->fm_out[slot] = output;
 }
 
-void NOPN2_DoTimerA(ym3438_t *chip)
+static inline void NOPN2_DoTimerA(ym3438_t *chip)
 {
     Bit16u time;
     Bit8u load;
@@ -1117,7 +1117,7 @@ void NOPN2_DoTimerA(ym3438_t *chip)
     chip->timer_a_cnt = time & 0x3ff;
 }
 
-void NOPN2_DoTimerB(ym3438_t *chip)
+static inline void NOPN2_DoTimerB(ym3438_t *chip)
 {
     Bit16u time;
     Bit8u load;
@@ -1162,7 +1162,7 @@ void NOPN2_DoTimerB(ym3438_t *chip)
     chip->timer_b_cnt = time & 0xff;
 }
 
-void NOPN2_KeyOn(ym3438_t*chip)
+static inline void NOPN2_KeyOn(ym3438_t*chip)
 {
     Bit32u slot = chip->cycles;
     Bit32u chan = chip->channel;
@@ -1188,7 +1188,7 @@ void NOPN2_KeyOn(ym3438_t*chip)
     }
 }
 
-void NOPN2_Reset(ym3438_t *chip, Bit32u clock, Bit32u rate)
+static inline void NOPN2_Reset(ym3438_t *chip, Bit32u clock, Bit32u rate)
 {
     Bit32u i;
     memset(chip, 0, sizeof(ym3438_t));
@@ -1212,12 +1212,12 @@ void NOPN2_Reset(ym3438_t *chip, Bit32u clock, Bit32u rate)
         chip->rateratio = (1 << RSM_FRAC);
 }
 
-void NOPN2_SetChipType(ym3438_t *chip, Bit32u type)
+static void NOPN2_SetChipType(ym3438_t *chip, Bit32u type)
 {
     chip->chip_type = type;
 }
 
-void NOPN2_Clock(ym3438_t *chip, Bit32s *buffer)
+static inline void NOPN2_Clock(ym3438_t *chip, Bit32s *buffer)
 {
     Bit32u slot = chip->cycles;
     chip->lfo_inc = chip->mode_test_21[1];
@@ -1354,7 +1354,7 @@ void NOPN2_Clock(ym3438_t *chip, Bit32s *buffer)
         chip->status_time--;
 }
 
-void NOPN2_Write(ym3438_t *chip, Bit32u port, Bit8u data)
+static inline void NOPN2_Write(ym3438_t *chip, Bit32u port, Bit8u data)
 {
     port &= 3;
     chip->write_data = ((port << 7) & 0x100) | data;
@@ -1370,12 +1370,12 @@ void NOPN2_Write(ym3438_t *chip, Bit32u port, Bit8u data)
     }
 }
 
-void NOPN2_SetTestPin(ym3438_t *chip, Bit32u value)
+static void NOPN2_SetTestPin(ym3438_t *chip, Bit32u value)
 {
     chip->pin_test_in = value & 1;
 }
 
-Bit32u NOPN2_ReadTestPin(ym3438_t *chip)
+static Bit32u NOPN2_ReadTestPin(ym3438_t *chip)
 {
     if (!chip->mode_test_2c[7])
     {
@@ -1384,12 +1384,12 @@ Bit32u NOPN2_ReadTestPin(ym3438_t *chip)
     return chip->cycles == 23;
 }
 
-Bit32u NOPN2_ReadIRQPin(ym3438_t *chip)
+static inline Bit32u NOPN2_ReadIRQPin(ym3438_t *chip)
 {
     return chip->timer_a_overflow_flag | chip->timer_b_overflow_flag;
 }
 
-Bit8u NOPN2_Read(ym3438_t *chip, Bit32u port)
+static inline Bit8u NOPN2_Read(ym3438_t *chip, Bit32u port)
 {
     if ((port & 3) == 0 || (chip->chip_type & ym3438_mode_readmode))
     {
@@ -1437,7 +1437,7 @@ Bit8u NOPN2_Read(ym3438_t *chip, Bit32u port)
     return 0;
 }
 
-void NOPN2_WriteBuffered(ym3438_t *chip, UINT8 port, UINT8 data)
+static inline void NOPN2_WriteBuffered(ym3438_t *chip, UINT8 port, UINT8 data)
 {
     Bit64u time1, time2;
     Bit32s buffer[2];
@@ -1482,7 +1482,7 @@ UINT8 nukedopn2_read(void *chip, UINT8 port)
 	return NOPN2_Read((ym3438_t*)chip, port);
 }
 
-void NOPN2_GenerateResampled(ym3438_t *chip, Bit32s *buf)
+static inline void NOPN2_GenerateResampled(ym3438_t *chip, Bit32s *buf)
 {
     Bit32u i;
     Bit32s buffer[2];
