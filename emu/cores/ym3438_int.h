@@ -219,13 +219,4 @@ typedef struct
     opn2_writebuf writebuf[NOPN_WRITEBUF_SIZE];
 } ym3438_t;
 
-void NOPN2_Reset(ym3438_t *chip, Bit32u clock, Bit32u rate);
-void NOPN2_SetChipType(ym3438_t *chip, Bit32u type);
-void NOPN2_Clock(ym3438_t *chip, Bit32s *buffer);
-void NOPN2_Write(ym3438_t *chip, Bit32u port, Bit8u data);
-void NOPN2_SetTestPin(ym3438_t *chip, Bit32u value);
-Bit32u NOPN2_ReadTestPin(ym3438_t *chip);
-Bit32u NOPN2_ReadIRQPin(ym3438_t *chip);
-Bit8u NOPN2_Read(ym3438_t *chip, Bit32u port);
-
 #endif	// __YM3438_INT_H__
