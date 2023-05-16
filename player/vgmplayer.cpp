@@ -1886,6 +1886,8 @@ void VGMPlayer::ParseFileForFMClocks()
 			return;
 
 		default:
+			if (_CMD_INFO[curCmd].cmdLen == 0)
+				return;
 			filePos += _CMD_INFO[curCmd].cmdLen;
 			break;
 		}
